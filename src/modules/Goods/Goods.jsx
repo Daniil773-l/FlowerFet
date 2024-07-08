@@ -1,4 +1,5 @@
 import {goodsArray} from '../../goodsArray';
+import './goods.scss';
 import {Card} from '../Card/Card';
 import {Cart} from '../Cart/Cart'
 

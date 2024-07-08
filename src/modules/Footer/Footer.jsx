@@ -1,3 +1,4 @@
+import './footer.scss';
 export const Footer = () => {
 
   return (
@@ -47,7 +48,6 @@ export const Footer = () => {
       </address>
   
       <div className="footer__developers">
-        <p className="footer__developers-title">Проект сделан в учебных целях</p>
   
         <ul className="footer__developers-list">
           <li className="footer__developers-item">
@@ -55,8 +55,7 @@ export const Footer = () => {
               Ilina</a>
           </li>
           <li className="footer__developers-item">
-            Developer: <a className="footer__link" href="maksim_leskin">Makism
-              Leskin</a>
+            Developer: <a className="footer__link" href="@Khabibullin_Daniel">Daniel Khabibullin</a>
           </li>
         </ul>
       </div>
