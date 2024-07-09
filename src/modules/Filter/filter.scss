@@ -79,22 +79,6 @@
     background-color: $light-orange;
   }
 
-  &__choices {
-    position: relative;
-  }
-
-  &__select {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    &:after {
-      content: "";
-      width: 8px;
-      height: 8px;
-      background: url("/img/arrow.svg") no-repeat center/contain;
-    }
-  }
 
   &__price {
     border: 0;
@@ -105,13 +89,7 @@
   }
 
   &__choices-box {
-    position: absolute;
-    top: calc(100% + 20px);
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: $white;
-    padding: 24px;
-    border-radius: 12px;
+    // TODO
 
     &_type {
       padding: 16px;
