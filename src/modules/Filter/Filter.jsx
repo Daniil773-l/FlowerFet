@@ -1,9 +1,18 @@
 import {useState} from 'react';
 import {Choices} from '../Choices/Choices'
 import './filter.scss'
+import {useDispatch} from 'react-redux';
+import {fetchGoods} from '../../redux/goodsSlice';
 
 export const Filter = () => {
+  const dispatch = useDispatch();
   const [openChoice, setOpenChoice]= useState(null);
+  const [selectedType, setSelectedType] = useState('bouquets');
+  const handleTypeChange = (event) => {
+    const type = event.target.value;
+    setSelectedType(type);
+    dispatch(fetchGoods({ type }));
+  };
   const handleChoicesToggle = (index) => {
     setOpenChoice(openChoice === index ? null : index);
   }
@@ -20,6 +29,7 @@ export const Filter = () => {
               value="bouquets"
               id="flower"
               defaultChecked
+              onChange={handleTypeChange}
             />
             <label
               className="filter__label filter__label_flower"
@@ -34,6 +44,7 @@ export const Filter = () => {
               name="type"
               value="toys"
               id="toys"
+              onChange={handleTypeChange}
             />
             <label
               className="filter__label filter__label_toys"
@@ -48,6 +59,7 @@ export const Filter = () => {
               name="type"
               value="postcards"
               id="postcard"
+              onChange={handleTypeChange}
             />
             <label
               className="filter__label filter__label_postcard"

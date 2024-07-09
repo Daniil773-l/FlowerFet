@@ -74,6 +74,10 @@
     min-width: 120px;
     color: $white;
     background: $light-orange;
+
+    &:hover {
+      transition: all .3s ease;
+    }
   }
 
   &__button-text {
