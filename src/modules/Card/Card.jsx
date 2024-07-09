@@ -1,7 +1,13 @@
 import classNames from "classnames";
 import './card.scss'
+import {useDispatch} from 'react-redux';
+import {addItemToCart} from '../../redux/cartSlice';
 
-export const Card = ({ className, img, title, dateDelivery, price }) => {
+export const Card = ({ className, id, img, title, dateDelivery, price }) => {
+  const dispatch = useDispatch();
+  const hadlerAddToCart = () => {
+    dispatch(addItemToCart({id, img, title, dateDelivery, price}));
+  }
   return (
     <article className={classNames(className, "card")}>
       <img
@@ -13,7 +19,7 @@ export const Card = ({ className, img, title, dateDelivery, price }) => {
         <h3 className="card__title">{title}</h3>
         <div className="card__footer">
           <p className="card__date-delivery">{dateDelivery}</p>
-          <button className="card__button">{price}&nbsp;₽</button>
+          <button className="card__button" onClick={hadlerAddToCart}>{price}&nbsp;₽</button>
         </div>
       </div>
     </article>

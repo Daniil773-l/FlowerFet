@@ -4,8 +4,8 @@ const initialState = {
   isOpen: false,
 };
 
-const modalSlice = createSlice({
-  name: 'modal',
+const orderSlice = createSlice({
+  name: 'order',
   initialState,
   reducers: {
     openModal(state) {
@@ -17,6 +17,7 @@ const modalSlice = createSlice({
   },
 });
 
-export const {openModal, closeModal} = modalSlice.actions;
+export const {openModal, closeModal} = orderSlice.actions;
 
-export default modalSlice.reducer;
+export default orderSlice.reducer;
+//rxslice
