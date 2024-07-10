@@ -6,17 +6,17 @@ import {useState} from 'react';
 
 export const Card = ({ className, id, img, title, dateDelivery, price }) => {
   const dispatch = useDispatch();
-  const [isHovered, setIsHovered] = useState(false);
+  const [buttonText, setIsHovered] = useState(`${price}\u00A0₽`);
   const hadlerAddToCart = () => {
     dispatch(addItemToCart({id, img, title, dateDelivery, price}));
   }
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    setIsHovered('в корзину');
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    setIsHovered(`${price}\u00A0₽`);
   };
   return (
     <article className={classNames(className, "card")}>
@@ -34,7 +34,7 @@ export const Card = ({ className, id, img, title, dateDelivery, price }) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {isHovered ? 'в корзину' : `${price} ₽`}</button>
+            {buttonText}</button>
         </div>
       </div>
     </article>

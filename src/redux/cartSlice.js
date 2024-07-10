@@ -1,8 +1,20 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {API_URL} from '../const';
+
+export const registerCart = createAsyncThunk('cart/registerCart', async () => {
+  const response = await fetch(`${API_URL}/api/cart/register`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+  return await response.json();
+});
 
 const initialState = {
   isOpen: false,
   items: JSON.parse(localStorage.getItem('cartItems') || '[]'),
+  status: 'idle',
+  accessKey: null,
+  error: null,
 };
 
 const cartSlice = createSlice({
@@ -22,6 +34,21 @@ const cartSlice = createSlice({
       }
       localStorage.setItem('cartItems', JSON.stringify(state.items));
     },
+  },
+  extraReducers: builder => {
+    builder
+    .addCase(registerCart.pending, (state) => {
+      state.status = 'loading';
+    })
+    .addCase(registerCart.fulfilled, (state, action) => {
+      state.status = 'successed';
+      state.accessKey = action.payload.accessKey;
+    })
+    .addCase(registerCart.rejected, (state, action) => {
+      state.status = 'failed';
+      state.accessKey = '';
+      state.error = action.error.message;
+    });
   },
 });
 

@@ -7,13 +7,15 @@ import {Hero} from './modules/Hero/Hero'
 import {Order} from './modules/Order/Order'
 import {Subscribe} from './modules/Subscribe/Subscribe'
 import {useEffect} from 'react'
-import {fetchGoods} from './redux/goodsSlice'
+import {registerCart} from './redux/cartSlice'
 
 export const App = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchGoods({ type: 'bouquets' }));
+    const initializeCart = async () => {
+      await dispatch(registerCart());
+    };
+    initializeCart();
   }, [dispatch]);
 
   return (

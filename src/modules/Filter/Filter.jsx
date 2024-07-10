@@ -1,18 +1,53 @@
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Choices} from '../Choices/Choices'
 import './filter.scss'
 import {useDispatch} from 'react-redux';
 import {fetchGoods} from '../../redux/goodsSlice';
+import {debounce, getValidFilters} from '../../util';
 
 export const Filter = () => {
   const dispatch = useDispatch();
   const [openChoice, setOpenChoice]= useState(null);
-  const [selectedType, setSelectedType] = useState('bouquets');
-  const handleTypeChange = (event) => {
-    const type = event.target.value;
-    setSelectedType(type);
-    dispatch(fetchGoods({ type }));
+  const [filters, setFilters] = useState({
+    type: 'bouquets',
+    minPrice: '',
+    maxPrice: '',
+    category: '',
+  });
+
+  const prevFiltersRef = useRef(filters);
+
+  const debouncedFetchGoods = useRef(
+    debounce((filters) => {
+      dispatch(fetchGoods(filters));
+    }, 350)
+  ).current;
+
+  useEffect(() => {
+    const prevFilters = prevFiltersRef.current;
+    if (prevFilters.type !== filters.type) {
+      const validFilter = getValidFilters(filters);
+      dispatch(fetchGoods(validFilter));
+    } else {
+      debouncedFetchGoods(filters);
+    }
+    prevFiltersRef.current = filters;
+
+  }, [dispatch, debouncedFetchGoods, filters]);
+
+  const handleTypeChange = ({target}) => {
+    const {value} = target;
+    const newFilters = {...filters, type: value, minPrice: '', maxPrice: ''};
+    setFilters(newFilters);
+    setOpenChoice(null);
   };
+
+  const handlePriceChange = ({target}) => {
+    const {name, value} = target;
+    const newFilters = {...filters, [name]: !isNaN(parseInt(value, 10)) ? value : ''};
+    setFilters(newFilters);
+  };
+
   const handleChoicesToggle = (index) => {
     setOpenChoice(openChoice === index ? null : index);
   }
@@ -28,7 +63,7 @@ export const Filter = () => {
               name="type"
               value="bouquets"
               id="flower"
-              defaultChecked
+              checked={filters.type === 'bouquets'}
               onChange={handleTypeChange}
             />
             <label
@@ -44,6 +79,7 @@ export const Filter = () => {
               name="type"
               value="toys"
               id="toys"
+              checked={filters.type === 'toys'}
               onChange={handleTypeChange}
             />
             <label
@@ -59,6 +95,7 @@ export const Filter = () => {
               name="type"
               value="postcards"
               id="postcard"
+              checked={filters.type === 'postcards'}
               onChange={handleTypeChange}
             />
             <label
@@ -80,12 +117,16 @@ export const Filter = () => {
                   type="text"
                   name="minPrice"
                   placeholder="от"
+                  value={filters.minPrice}
+                  onChange={handlePriceChange}
                 />
                 <input
                   className="filter__input-price"
                   type="text"
                   name="maxPrice"
                   placeholder="до"
+                  value={filters.maxPrice}
+                  onChange={handlePriceChange}
                 />
               </fieldset>
             </Choices>
