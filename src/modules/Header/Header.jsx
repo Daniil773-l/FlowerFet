@@ -11,19 +11,21 @@ export const Header = () => {
   const cartItems = useSelector(state => state.cart.items);
   const totalItemsCount = cartItems.reduce((total, item) => total + item.count, 0);
 
-  const debouncedFetchGoods = useRef(
+  const debouncedSetSearch = useRef(
     debounce((searchQuery) => {
-      dispatch(fetchGoods({ search: searchQuery }));
+      dispatch(setSearch(searchQuery));
     }, 350)
   ).current;
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
-    dispatch(setSearch(value));
-    dispatch(clearFilters());
-    debouncedFetchGoods(value);
+    if (value.trim() === '') {
+      dispatch(clearFilters());
+      dispatch(fetchGoods({}));
+    } else {
+      debouncedSetSearch(value);
+    }
   };
-
 
   const handlerCartToggle = () => {
     dispatch(toggleCart());
