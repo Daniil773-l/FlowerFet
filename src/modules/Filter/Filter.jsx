@@ -1,19 +1,15 @@
 import {useEffect, useRef, useState} from 'react';
 import {Choices} from '../Choices/Choices'
 import './filter.scss'
-import {useDispatch} from 'react-redux';
-import {fetchGoods} from '../../redux/goodsSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchGoods, setType} from '../../redux/goodsSlice';
 import {debounce, getValidFilters} from '../../util';
+import {setFilters, setMaxPrice, setMinPrice} from '../../redux/filterSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
+  const filters = useSelector(state => state.filter);
   const [openChoice, setOpenChoice]= useState(null);
-  const [filters, setFilters] = useState({
-    type: 'bouquets',
-    minPrice: '',
-    maxPrice: '',
-    category: '',
-  });
 
   const prevFiltersRef = useRef(filters);
 
@@ -27,6 +23,7 @@ export const Filter = () => {
     const prevFilters = prevFiltersRef.current;
     if (prevFilters.type !== filters.type) {
       const validFilter = getValidFilters(filters);
+      dispatch(setType(filters.type)); 
       dispatch(fetchGoods(validFilter));
     } else {
       debouncedFetchGoods(filters);
@@ -37,15 +34,16 @@ export const Filter = () => {
 
   const handleTypeChange = ({target}) => {
     const {value} = target;
-    const newFilters = {...filters, type: value, minPrice: '', maxPrice: ''};
-    setFilters(newFilters);
+    dispatch(setFilters({ type: value, minPrice: '', maxPrice: '' }));
     setOpenChoice(null);
   };
 
   const handlePriceChange = ({target}) => {
     const {name, value} = target;
-    const newFilters = {...filters, [name]: !isNaN(parseInt(value, 10)) ? value : ''};
-    setFilters(newFilters);
+    const checkedValue = !isNaN(parseInt(value, 10)) ? value : ''
+    // const newFilters = {...filters, [name]: !isNaN(parseInt(value, 10)) ? value : ''};
+    // setFilters(newFilters);
+    dispatch(name === 'minPrice' ? setMinPrice(checkedValue) : setMaxPrice(checkedValue));
   };
 
   const handleChoicesToggle = (index) => {

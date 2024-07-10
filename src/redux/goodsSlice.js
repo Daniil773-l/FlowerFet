@@ -15,12 +15,17 @@ const initialState = {
   items: [],
   status: 'idle',
   error: null,
+  type: 'bouquets',
 }
 
 const goodsSlice = createSlice({
   name: 'goods',
   initialState,
-  reducers: {},
+  reducers: {
+    setType(state, action) {
+      state.type = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGoods.pending, (state) => {
@@ -37,5 +42,6 @@ const goodsSlice = createSlice({
   },
 });
 
+export const { setType } = goodsSlice.actions;
 
 export default goodsSlice.reducer;

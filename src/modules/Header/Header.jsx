@@ -1,11 +1,29 @@
 import {useDispatch, useSelector} from 'react-redux'
 import './header.scss'
 import {toggleCart} from '../../redux/cartSlice';
+import {debounce} from '../../util';
+import {useRef} from 'react';
+import {fetchGoods} from '../../redux/goodsSlice';
+import {clearFilters, setSearch} from '../../redux/filterSlice';
 
 export const Header = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart.items);
   const totalItemsCount = cartItems.reduce((total, item) => total + item.count, 0);
+
+  const debouncedFetchGoods = useRef(
+    debounce((searchQuery) => {
+      dispatch(fetchGoods({ search: searchQuery }));
+    }, 350)
+  ).current;
+
+  const handleSearchChange = (e) => {
+    const { value } = e.target;
+    dispatch(setSearch(value));
+    dispatch(clearFilters());
+    debouncedFetchGoods(value);
+  };
+
 
   const handlerCartToggle = () => {
     dispatch(toggleCart());
@@ -16,7 +34,9 @@ export const Header = () => {
       <div className="container header__container">
         <form className="header__form" action="#">
           <input className="header__input" type="search" name="search"
-            placeholder="Букет из роз" />
+            placeholder="Букет из роз" 
+            onChange={handleSearchChange}
+            />
 
           <button className="header__search-button" aria-label="начать поиск">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"

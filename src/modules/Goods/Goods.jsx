@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {API_URL} from '../../const';
 
 export const Goods = () => {
-  const {items: goods, status: goodsStatus, error} = useSelector(state => state.goods);
+  const {items: goods, status: goodsStatus, error, type} = useSelector(state => state.goods);
 
   let content = null;
 
@@ -33,11 +33,20 @@ export const Goods = () => {
     content = <p>Error...</p>
   }
 
+  const getTitle = (type) => {
+    switch (type) {
+      case 'bouquets': return 'Цветы';
+      case 'toys': return 'Игрушки';
+      case 'postcards': return 'Открытки';
+      default: return 'Товары';
+    }
+  };
+
   return (
     <section className="goods">
       <div className="container goods__container">
         <div className="goods__box">
-          <h2 className="goods__title">Цветы</h2>
+          <h2 className="goods__title">{getTitle(type)}</h2>
           {content}
         </div>
 
