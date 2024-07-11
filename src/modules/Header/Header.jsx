@@ -1,43 +1,36 @@
 import {useDispatch, useSelector} from 'react-redux'
 import './header.scss'
 import {toggleCart} from '../../redux/cartSlice';
-import {debounce} from '../../util';
-import {useRef} from 'react';
+import {useState} from 'react';
 import {fetchGoods} from '../../redux/goodsSlice';
-import {clearFilters, setSearch} from '../../redux/filterSlice';
+import {changeType} from '../../redux/filtersSlice';
 
-export const Header = () => {
+export const Header = ({setTitleGoods}) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart.items);
-  const totalItemsCount = cartItems.reduce((total, item) => total + item.count, 0);
-
-  const debouncedSetSearch = useRef(
-    debounce((searchQuery) => {
-      dispatch(setSearch(searchQuery));
-    }, 350)
-  ).current;
-
-  const handleSearchChange = (e) => {
-    const { value } = e.target;
-    if (value.trim() === '') {
-      dispatch(clearFilters());
-      dispatch(fetchGoods({}));
-    } else {
-      debouncedSetSearch(value);
-    }
-  };
+  console.log('cartItems: ', cartItems);
+  // const totalItemsCount = cartItems?.reduce((total, item) => total + item.count, 0);
+  const [searchValue, setSearchValue] = useState('');
 
   const handlerCartToggle = () => {
     dispatch(toggleCart());
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(fetchGoods({search: searchValue}));
+    setTitleGoods('Результаты поиска');
+    dispatch(changeType(''));
+  }
+
   return (
     <header className="header">
       <div className="container header__container">
-        <form className="header__form" action="#">
+        <form className="header__form" action="#" onSubmit={handleSubmit}>
           <input className="header__input" type="search" name="search"
-            placeholder="Букет из роз" 
-            onChange={handleSearchChange}
+            placeholder="Букет из роз"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             />
 
           <button className="header__search-button" aria-label="начать поиск">
@@ -53,7 +46,7 @@ export const Header = () => {
         <img className="header__logo" src="/img/logo.svg"
           alt="Логотип Mirano Flower Boutique" />
 
-        <button className="header__cart-button" onClick={handlerCartToggle}>{totalItemsCount}</button>
+        <button className="header__cart-button" onClick={handlerCartToggle}>{cartItems.length}</button>
       </div>
     </header>
   )

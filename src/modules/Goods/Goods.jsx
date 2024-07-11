@@ -4,15 +4,15 @@ import {Cart} from '../Cart/Cart'
 import {useSelector} from 'react-redux';
 import {API_URL} from '../../const';
 
-export const Goods = () => {
-  const {items: goods, status: goodsStatus, error, type} = useSelector(state => state.goods);
+export const Goods = ({title}) => {
+  const {items: goods, status: goodsStatus, error} = useSelector(state => state.goods);
 
   let content = null;
 
   if (goodsStatus === 'loading') { 
     content = <p>Loading...</p>
   }
-  if (goodsStatus === 'successed') {
+  if (goodsStatus === 'successed' && goods.length) {
     content = (
       <ul className="goods__list">
         {goods.map((item) => (
@@ -29,27 +29,20 @@ export const Goods = () => {
       </ul>
     )
   }
-  if (goodsStatus === 'failed') { 
-    content = <p>Error...</p>
+  if (!goods.length) {
+    content = <p>По вашему запросу ничего не найдено</p>
   }
-
-  const getTitle = (type) => {
-    switch (type) {
-      case 'bouquets': return 'Цветы';
-      case 'toys': return 'Игрушки';
-      case 'postcards': return 'Открытки';
-      default: return 'Товары';
-    }
-  };
+  if (goodsStatus === 'failed') { 
+    content = <p>{error}</p>
+  }
 
   return (
     <section className="goods">
       <div className="container goods__container">
         <div className="goods__box">
-          <h2 className="goods__title">{getTitle(type)}</h2>
+          <h2 className="goods__title">{title}</h2>
           {content}
         </div>
-
         <Cart />
       </div>
     </section>

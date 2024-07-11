@@ -2,13 +2,20 @@ import {useEffect, useRef, useState} from 'react';
 import {Choices} from '../Choices/Choices'
 import './filter.scss'
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchGoods, setType} from '../../redux/goodsSlice';
+import {fetchGoods} from '../../redux/goodsSlice';
 import {debounce, getValidFilters} from '../../util';
-import {setFilters, setMaxPrice, setMinPrice} from '../../redux/filterSlice';
+import {changePrice, changeType} from '../../redux/filtersSlice';
+import {FilterRadio} from './FilterRadio';
 
-export const Filter = () => {
+const filterTypes = [
+  {value: 'bouquets', title: 'Цветы'},
+  {value: 'toys', title: 'Игрушки'},
+  {value: 'postcards', title: 'Открытки'},
+]
+
+export const Filter = ({ setTitleGoods }) => {
   const dispatch = useDispatch();
-  const filters = useSelector(state => state.filter);
+  const filters = useSelector(state => state.filters);
   const [openChoice, setOpenChoice]= useState(null);
 
   const prevFiltersRef = useRef(filters);
@@ -21,29 +28,30 @@ export const Filter = () => {
 
   useEffect(() => {
     const prevFilters = prevFiltersRef.current;
-    if (prevFilters.type !== filters.type) {
-      const validFilter = getValidFilters(filters);
-      dispatch(setType(filters.type)); 
+    const validFilter = getValidFilters(filters);
+    if (!validFilter.type) {
+      return;
+    }
+    if (prevFilters.type !== validFilter.type) {
       dispatch(fetchGoods(validFilter));
+    setTitleGoods(
+      filterTypes.find(item => item.value === validFilter.type).title
+    );
     } else {
-      debouncedFetchGoods(filters);
+      debouncedFetchGoods(validFilter);
     }
     prevFiltersRef.current = filters;
-
-  }, [dispatch, debouncedFetchGoods, filters]);
+  }, [dispatch, setTitleGoods, debouncedFetchGoods, filters]);
 
   const handleTypeChange = ({target}) => {
     const {value} = target;
-    dispatch(setFilters({ type: value, minPrice: '', maxPrice: '' }));
+    dispatch(changeType(value));
     setOpenChoice(null);
   };
 
   const handlePriceChange = ({target}) => {
     const {name, value} = target;
-    const checkedValue = !isNaN(parseInt(value, 10)) ? value : ''
-    // const newFilters = {...filters, [name]: !isNaN(parseInt(value, 10)) ? value : ''};
-    // setFilters(newFilters);
-    dispatch(name === 'minPrice' ? setMinPrice(checkedValue) : setMaxPrice(checkedValue));
+    dispatch(changePrice({name, value}));
   };
 
   const handleChoicesToggle = (index) => {
@@ -55,53 +63,13 @@ export const Filter = () => {
       <div className="container">
         <form className="filter__form">
           <fieldset className="filter__group">
-            <input
-              className="filter__radio"
-              type="radio"
-              name="type"
-              value="bouquets"
-              id="flower"
-              checked={filters.type === 'bouquets'}
-              onChange={handleTypeChange}
-            />
-            <label
-              className="filter__label filter__label_flower"
-              htmlFor="flower"
-            >
-              Цветы
-            </label>
-
-            <input
-              className="filter__radio"
-              type="radio"
-              name="type"
-              value="toys"
-              id="toys"
-              checked={filters.type === 'toys'}
-              onChange={handleTypeChange}
-            />
-            <label
-              className="filter__label filter__label_toys"
-              htmlFor="toys"
-            >
-              Игрушки
-            </label>
-
-            <input
-              className="filter__radio"
-              type="radio"
-              name="type"
-              value="postcards"
-              id="postcard"
-              checked={filters.type === 'postcards'}
-              onChange={handleTypeChange}
-            />
-            <label
-              className="filter__label filter__label_postcard"
-              htmlFor="postcard"
-            >
-              Открытки
-            </label>
+            {filterTypes.map(item => (
+            <FilterRadio
+            key={item.value}
+            data={item}
+            handleTypeChange={handleTypeChange}
+            type={filters.type}
+            />))}
           </fieldset>
 
           <fieldset className="filter__group filter__group_choices">

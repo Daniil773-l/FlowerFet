@@ -21,11 +21,7 @@ const initialState = {
 const goodsSlice = createSlice({
   name: 'goods',
   initialState,
-  reducers: {
-    setType(state, action) {
-      state.type = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchGoods.pending, (state) => {
@@ -41,7 +37,5 @@ const goodsSlice = createSlice({
       })
   },
 });
-
-export const { setType } = goodsSlice.actions;
 
 export default goodsSlice.reducer;
