@@ -5,11 +5,11 @@ import {useState} from 'react';
 import {fetchGoods} from '../../redux/goodsSlice';
 import {changeType} from '../../redux/filtersSlice';
 
-export const Header = ({setTitleGoods}) => {
+export const Header = ({setTitleGoods, scrollToGoods}) => {
   const dispatch = useDispatch();
-  const cartItems = useSelector(state => state.cart.items);
-  console.log('cartItems: ', cartItems);
-  // const totalItemsCount = cartItems?.reduce((total, item) => total + item.count, 0);
+  const { items: cartItems, status: cartStatus } = useSelector((state) => state.cart);
+  const totalItemsCount = Array.isArray(cartItems) ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+
   const [searchValue, setSearchValue] = useState('');
 
   const handlerCartToggle = () => {
@@ -21,6 +21,8 @@ export const Header = ({setTitleGoods}) => {
     dispatch(fetchGoods({search: searchValue}));
     setTitleGoods('Результаты поиска');
     dispatch(changeType(''));
+    scrollToGoods();
+    setSearchValue ('');
   }
 
   return (
@@ -46,7 +48,9 @@ export const Header = ({setTitleGoods}) => {
         <img className="header__logo" src="/img/logo.svg"
           alt="Логотип Mirano Flower Boutique" />
 
-        <button className="header__cart-button" onClick={handlerCartToggle}>{cartItems.length}</button>
+        <button className="header__cart-button" onClick={handlerCartToggle}>
+          {cartStatus === ('idle' || 'loading') ? 0 : totalItemsCount}
+          </button>
       </div>
     </header>
   )

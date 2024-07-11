@@ -18,7 +18,7 @@ export const Filter = ({ setTitleGoods }) => {
   const filters = useSelector(state => state.filters);
   const [openChoice, setOpenChoice]= useState(null);
 
-  const prevFiltersRef = useRef(filters);
+  const prevFiltersRef = useRef({});
 
   const debouncedFetchGoods = useRef(
     debounce((filters) => {

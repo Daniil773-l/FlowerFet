@@ -55,4 +55,10 @@
     color: $green;
     grid-column: 1 / -1;
   }
+  &__not-found {
+    color: tomato;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 20px;
+  }
 }

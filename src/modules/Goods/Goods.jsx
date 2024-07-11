@@ -4,15 +4,14 @@ import {Cart} from '../Cart/Cart'
 import {useSelector} from 'react-redux';
 import {API_URL} from '../../const';
 
-export const Goods = ({title}) => {
+export const Goods = ({title, goodsRef}) => {
   const {items: goods, status: goodsStatus, error} = useSelector(state => state.goods);
 
   let content = null;
 
   if (goodsStatus === 'loading') { 
     content = <p>Loading...</p>
-  }
-  if (goodsStatus === 'successed' && goods.length) {
+  } else if (goodsStatus === 'successed' && goods.length) {
     content = (
       <ul className="goods__list">
         {goods.map((item) => (
@@ -28,16 +27,14 @@ export const Goods = ({title}) => {
         ))}
       </ul>
     )
-  }
-  if (!goods.length) {
-    content = <p>По вашему запросу ничего не найдено</p>
-  }
-  if (goodsStatus === 'failed') { 
+  } else if (goodsStatus === 'successed' && !goods.length) {
+    content = <p className="goods__not-found">По вашему запросу ничего не найдено</p>;
+  } else if (goodsStatus === 'failed') { 
     content = <p>{error}</p>
   }
 
   return (
-    <section className="goods">
+    <section className="goods" ref={goodsRef}>
       <div className="container goods__container">
         <div className="goods__box">
           <h2 className="goods__title">{title}</h2>

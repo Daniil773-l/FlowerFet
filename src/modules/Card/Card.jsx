@@ -8,6 +8,7 @@ export const Card = ({ className, id, img, title, dateDelivery, price }) => {
   const dispatch = useDispatch();
   const [buttonText, setIsHovered] = useState(`${price}\u00A0₽`);
   const hadlerAddToCart = () => {
+    console.log('Adding to cart:', { productId: id, quantity: 1 });
     dispatch(addItemToCart({productId: id, quantity: 1}));
   }
 

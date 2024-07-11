@@ -8,9 +8,7 @@ export const Cart = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(state => state.cart.isOpen);
   const items = useSelector(state => state.cart.items);
-  console.log('items: ', items);
-  // const totalItemsPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
+  const totalItemsPrice = Array.isArray(items) ? items.reduce((acc, item) => acc + item.price * item.quantity, 0) : 0;
   const cartRef = useRef(null);
 
   const handlerCartClose = () => {
@@ -25,13 +23,6 @@ export const Cart = () => {
       cartRef.current.scrollIntoView({behavior: 'smooth', block: 'end'});
     }
   }, [isOpen]);
-
-  let totalPrice = 0;
-
-  // if (cartStatus === 'successed') {
-  //   const totalItemsPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  //   return totalPrice = totalItemsPrice;
-  // }
 
   if (!isOpen) return null;
   return (
@@ -62,7 +53,7 @@ export const Cart = () => {
 
         <div className="cart__footer">
           <button className="cart__order-btn" onClick={handlerOrderOpen}>Оформить</button>
-          <p className="cart__price cart__price_total">{totalPrice}&nbsp;₽</p>
+          <p className="cart__price cart__price_total">{totalItemsPrice}&nbsp;₽</p>
         </div>
       </div>
     </section>

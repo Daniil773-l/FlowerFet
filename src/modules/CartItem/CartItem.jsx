@@ -1,6 +1,6 @@
 import {API_URL} from '../../const'
 import s from './CartItem.module.scss'
-export const CartItem = ({photoUrl, name: title, price}) => {
+export const CartItem = ({photoUrl, name: title, price, quantity}) => {
 
   return (
     <>
@@ -13,7 +13,7 @@ export const CartItem = ({photoUrl, name: title, price}) => {
             className={s.btn}>-</button>
             <input
             className={s.input} type="number" max="99" min="0"
-            value="1" /><button className={s.btn}>+</button></div>
+            value={quantity} /><button className={s.btn}>+</button></div>
         <p className="price">{price}&nbsp;₽</p>
         </li>
     </>
