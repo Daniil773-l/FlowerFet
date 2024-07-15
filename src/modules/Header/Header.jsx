@@ -5,7 +5,7 @@ import {useState} from 'react';
 import {fetchGoods} from '../../redux/goodsSlice';
 import {changeType} from '../../redux/filtersSlice';
 
-export const Header = ({setTitleGoods, scrollToGoods}) => {
+export const Header = ({setTitleGoods, scrollToFilter}) => {
   const dispatch = useDispatch();
   const { items: cartItems, status: cartStatus } = useSelector((state) => state.cart);
   const totalItemsCount = Array.isArray(cartItems) ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
@@ -21,7 +21,7 @@ export const Header = ({setTitleGoods, scrollToGoods}) => {
     dispatch(fetchGoods({search: searchValue}));
     setTitleGoods('Результаты поиска');
     dispatch(changeType(''));
-    scrollToGoods();
+    scrollToFilter();
     setSearchValue ('');
   }
 

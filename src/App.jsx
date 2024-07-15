@@ -14,11 +14,11 @@ export const App = () => {
 
   const [titleGoods, setTitleGoods] = useState('');
 
-  const goodsRef = useRef(null);
+  const filterRef = useRef(null);
 
-  const scrollToGoods = () => {
-    if (goodsRef.current) {
-      goodsRef.current.scrollIntoView({ behavior: 'smooth' });
+  const scrollToFilter = () => {
+    if (filterRef.current) {
+      filterRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -32,14 +32,14 @@ export const App = () => {
 
   return (
     <>
-      <Header setTitleGoods={setTitleGoods} scrollToGoods={scrollToGoods}/>
+      <Header setTitleGoods={setTitleGoods} scrollToFilter={scrollToFilter}/>
 
       <main>
         <Hero />
 
-        <Filter setTitleGoods={setTitleGoods}/>
+        <Filter setTitleGoods={setTitleGoods} filterRef={filterRef}/>
 
-        <Goods title={titleGoods} goodsRef={goodsRef}/>
+        <Goods title={titleGoods}/>
 
         <Subscribe />
       </main>

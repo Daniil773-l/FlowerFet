@@ -1,16 +1,19 @@
 import './goods.scss';
+import './goods.scss';
 import {Card} from '../Card/Card';
 import {Cart} from '../Cart/Cart'
 import {useSelector} from 'react-redux';
 import {API_URL} from '../../const';
 
-export const Goods = ({title, goodsRef}) => {
+export const Goods = ({title}) => {
   const {items: goods, status: goodsStatus, error} = useSelector(state => state.goods);
 
   let content = null;
 
-  if (goodsStatus === 'loading') { 
-    content = <p>Loading...</p>
+  if (goodsStatus === 'loading') {
+    content = <div className='spinnerBox'>
+      <div className='spinner'></div>
+    </div>
   } else if (goodsStatus === 'successed' && goods.length) {
     content = (
       <ul className="goods__list">
@@ -34,7 +37,7 @@ export const Goods = ({title, goodsRef}) => {
   }
 
   return (
-    <section className="goods" ref={goodsRef}>
+    <section className="goods">
       <div className="container goods__container">
         <div className="goods__box">
           <h2 className="goods__title">{title}</h2>
