@@ -1,8 +1,41 @@
-# React + Vite
+# React Flower Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive flower shop application built with React and Redux Toolkit. This project features a shopping cart, order management, and integrates with an API.
 
-Currently, two official plugins are available:
+## Features
+- **Vite**: Fast and optimized build tool.
+- **Redux Toolkit**: State management for shopping cart and orders.
+- **Responsive Design**: Ensures a great user experience on all devices.
+- **API Integration**: Fetches product data and handles orders through an API.
+- **Shopping Cart**: Add, remove, and manage items in the cart.
+- **Order Management**: Place and view orders.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
+- Check out the live demo [here](https://flower-shop-pqhf.onrender.com/)
+
+## Installation
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/DanielKhabibullin/flower-shop.git
+    cd flower-shop
+    ```
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+## Usage
+1. Start the development server:
+    ```bash
+    npm run dev
+    ```
+2. Open your browser and navigate to [http://localhost:5173](http://localhost:5173).
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a pull request.
