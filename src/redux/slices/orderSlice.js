@@ -1,6 +1,5 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {API_URL} from '../const';
-import {fetchCart, toggleCart} from './cartSlice';
+import {createSlice} from '@reduxjs/toolkit';
+import {sendOrder} from '../thunks/sendOrder';
 
 const initialState = {
   isOpen: false,
@@ -19,59 +18,11 @@ const initialState = {
   }
 };
 
-export const sendOrder = createAsyncThunk('order/sendOrder', async (_, {getState, dispatch}) => {
-  const {
-    order: {
-      data: {
-        buyerName,
-        buyerPhone,
-        recipientName,
-        recipientPhone,
-        street,
-        house,
-        apartment,
-        paymentOnline,
-        deliveryDate,
-        deliveryTime,
-      },
-    },
-  } = getState();
-  const orderData = {
-    buyer: {
-      name: buyerName,
-      phone: buyerPhone,
-    },
-    recipient: {
-      name: recipientName,
-      phone: recipientPhone,
-    },
-    address: `${street}, ${house}, ${apartment}`,
-    paymentOnline,
-    deliveryDate,
-    deliveryTime,
-  };
-
-  const response = await fetch(`${API_URL}/api/orders`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(orderData),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to send order to server');
-  }
-
-  dispatch(clearOrder());
-  dispatch(toggleCart());
-  dispatch(fetchCart());
-  return await response.json();
-});
-
 const orderSlice = createSlice({
   name: 'order',
   initialState,
+  status: 'idle',
+  error: null,
   reducers: {
     openModal(state) {
       state.isOpen = true;
@@ -101,14 +52,17 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(sendOrder.pending, (state) => {
+      state.orderId = '';
       state.status = 'loading';
     })
     .addCase(sendOrder.fulfilled, (state, action) => {
       state.status = 'successed';
       state.orderId = action.payload.orderId;
     })
-    .addCase(sendOrder.rejected, (state) => {
+    .addCase(sendOrder.rejected, (state, action) => {
+      state.orderId = '';
       state.status = 'failed';
+      state.error = action.payload || action.error.message;
     })
 
   }

@@ -1,9 +1,9 @@
 import './goods.scss';
-import './goods.scss';
 import {Card} from '../Card/Card';
 import {Cart} from '../Cart/Cart'
 import {useSelector} from 'react-redux';
 import {API_URL} from '../../const';
+import {Preload} from '../Preload/Preload';
 
 export const Goods = ({title}) => {
   const {items: goods, status: goodsStatus, error} = useSelector(state => state.goods);
@@ -11,9 +11,10 @@ export const Goods = ({title}) => {
   let content = null;
 
   if (goodsStatus === 'loading') {
-    content = <div className='spinnerBox'>
-      <div className='spinner'></div>
-    </div>
+    content = <Preload />;
+    // <div className='spinnerBox'>
+    //   <div className='spinner'></div>
+    // </div>
   } else if (goodsStatus === 'successed' && goods.length) {
     content = (
       <ul className="goods__list">
@@ -37,7 +38,8 @@ export const Goods = ({title}) => {
   }
 
   return (
-    <section className="goods">
+    <section className="goods"
+    style={{position: goodsStatus === 'loading' ? 'relative' : 'static'}}>
       <div className="container goods__container">
         <div className="goods__box">
           <h2 className="goods__title">{title}</h2>

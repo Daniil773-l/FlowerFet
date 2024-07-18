@@ -1,14 +1,19 @@
 import classNames from "classnames";
 import './card.scss'
-import {useDispatch} from 'react-redux';
-import {addItemToCart} from '../../redux/cartSlice';
+import {useDispatch, useSelector} from 'react-redux';
 import {useState} from 'react';
+import {addItemToCart} from '../../redux/thunks/addItemToCart';
+import {toggleCart} from '../../redux/slices/cartSlice';
 
 export const Card = ({ className, id, img, title, dateDelivery, price }) => {
   const dispatch = useDispatch();
+  const isOpenCart = useSelector(state => state.cart.isOpen);
   const [buttonText, setIsHovered] = useState(`${price}\u00A0₽`);
   const hadlerAddToCart = () => {
     dispatch(addItemToCart({productId: id, quantity: 1}));
+    if (!isOpenCart) {
+      dispatch(toggleCart());
+    }
   }
 
   const handleMouseEnter = () => {

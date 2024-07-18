@@ -1,8 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit';
-import cartReducer from './cartSlice'
-import orderReducer from './orderSlice'
-import goodsReducer from './goodsSlice'
-import filtersReducer from './filtersSlice'
+import cartReducer from './slices/cartSlice'
+import orderReducer from './slices/orderSlice'
+import goodsReducer from './slices/goodsSlice'
+import filtersReducer from './slices/filtersSlice'
+// import dateReducer from './slices/dateSlice'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     order: orderReducer,
     goods: goodsReducer,
     filters: filtersReducer,
+    // date: dateReducer,
   }
 });
 

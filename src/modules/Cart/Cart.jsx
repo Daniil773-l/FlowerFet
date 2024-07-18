@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from 'react-redux'
 import {CartItem} from '../CartItem/CartItem'
 import './cart.scss'
-import {toggleCart} from '../../redux/cartSlice'
-import {openModal} from '../../redux/orderSlice'
+import {toggleCart} from '../../redux/slices/cartSlice'
+import {openModal} from '../../redux/slices/orderSlice'
 import {useEffect, useRef} from 'react'
 export const Cart = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export const Cart = () => {
 
   useEffect(() => {
     if (isOpen) {
-      cartRef.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+      cartRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
   }, [isOpen]);
 

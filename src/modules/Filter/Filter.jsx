@@ -2,11 +2,11 @@ import {useEffect, useRef, useState} from 'react';
 import {Choices} from '../Choices/Choices'
 import './filter.scss'
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchGoods} from '../../redux/goodsSlice';
 import {debounce, getValidFilters} from '../../util';
-import {changeCategory, changePrice, changeType} from '../../redux/filtersSlice';
+import {changeCategory, changePrice, changeType} from '../../redux/slices/filtersSlice';
 import {FilterRadio} from './FilterRadio';
 import classNames from 'classnames';
+import {fetchGoods} from '../../redux/thunks/fetchGoods';
 
 const filterTypes = [
   {value: 'bouquets', title: 'Цветы'},
@@ -14,13 +14,14 @@ const filterTypes = [
   {value: 'postcards', title: 'Открытки'},
 ]
 
-export const Filter = ({ setTitleGoods, filterRef }) => {
+export const Filter = ({ setTitleGoods }) => {
   const dispatch = useDispatch();
   const filters = useSelector(state => state.filters);
   const categories = useSelector(state => state.goods.categories);
   const [openChoice, setOpenChoice]= useState(null);
 
-  const prevFiltersRef = useRef({});
+  const filterRef = useRef();
+  const prevFiltersRef = useRef(filters);
 
   const debouncedFetchGoods = useRef(
     debounce((filters) => {
@@ -29,18 +30,40 @@ export const Filter = ({ setTitleGoods, filterRef }) => {
   ).current;
 
   useEffect(() => {
-    const prevFilters = prevFiltersRef.current;
+    if (filters !== prevFiltersRef.current) {
+    filterRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    document.addEventListener('click', (event) => {
+      if (openChoice && !event.target.closest('.filter__group')) {
+        setOpenChoice(null);
+      }
+    });
+  }, [openChoice]);
+
+  useEffect(() => {
+    const prevMinPrice = prevFiltersRef.current.minPrice;
+    const prevMaxPrice = prevFiltersRef.current.maxPrice;
+
     const validFilter = getValidFilters(filters);
-    if (!validFilter.type) {
+    if (!validFilter.type && !validFilter.search) {
       return;
     }
-    if (prevFilters.type !== validFilter.type) {
-      dispatch(fetchGoods(validFilter));
-    setTitleGoods(
-      filterTypes.find(item => item.value === validFilter.type).title
-    );
-    } else {
+
+    if(prevMinPrice !== filters.minPrice || prevMaxPrice !== filters.maxPrice) {
       debouncedFetchGoods(validFilter);
+      
+    } else {
+      dispatch(fetchGoods(validFilter));
+      const type = filterTypes.find(item => item.value === validFilter.type);
+      if (type) {
+        setTitleGoods(type.title);
+      }
+      if (validFilter.search) {
+        setTitleGoods('Результаты поиска');
+      }
     }
     prevFiltersRef.current = filters;
   }, [dispatch, setTitleGoods, debouncedFetchGoods, filters]);
@@ -93,7 +116,7 @@ export const Filter = ({ setTitleGoods, filterRef }) => {
               <fieldset className="filter__price">
                 <input
                   className="filter__input-price"
-                  type="text"
+                  type="number"
                   name="minPrice"
                   placeholder="от"
                   value={filters.minPrice}
@@ -101,7 +124,7 @@ export const Filter = ({ setTitleGoods, filterRef }) => {
                 />
                 <input
                   className="filter__input-price"
-                  type="text"
+                  type="number"
                   name="maxPrice"
                   placeholder="до"
                   value={filters.maxPrice}

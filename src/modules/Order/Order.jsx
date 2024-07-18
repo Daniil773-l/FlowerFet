@@ -1,8 +1,9 @@
 import {useDispatch, useSelector} from 'react-redux';
 import s from './Order.module.scss';
-import {closeModal, sendOrder, updateOrderData} from '../../redux/orderSlice';
+import {closeModal, updateOrderData} from '../../redux/slices/orderSlice';
 import {useCallback, useEffect} from 'react';
 import classNames from 'classnames';
+import {sendOrder} from '../../redux/thunks/sendOrder';
 export const Order = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(state => state.order.isOpen);
@@ -34,6 +35,10 @@ export const Order = () => {
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
+
+    // setInterval(() => {
+    //   dispatch(updateDeliveryTimes());
+    // }, 6000);
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
@@ -41,6 +46,7 @@ export const Order = () => {
   }, [isOpen, handleKeyDown]);
 
   if (!isOpen) return null;
+
     return (
       <div
         className={s.order}
@@ -70,6 +76,7 @@ export const Order = () => {
                       placeholder="Имя"
                       value={orderData.buyerName}
                       onChange={handleChange}
+                      required
                     />
                     <input
                       className={s.input}
@@ -78,6 +85,7 @@ export const Order = () => {
                       placeholder="Телефон"
                       value={orderData.buyerPhone}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </fieldset>
@@ -91,6 +99,7 @@ export const Order = () => {
                       placeholder="Имя"
                       value={orderData.recipientName}
                       onChange={handleChange}
+                      required
                     />
                     <input
                       className={s.input}
@@ -99,6 +108,7 @@ export const Order = () => {
                       placeholder="Телефон"
                       value={orderData.recipientPhone}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </fieldset>
@@ -112,6 +122,7 @@ export const Order = () => {
                       placeholder="Улица"
                       value={orderData.street}
                       onChange={handleChange}
+                      required
                     />
                     <input
                       className={classNames(s.input, s.input_min)}
@@ -120,6 +131,7 @@ export const Order = () => {
                       placeholder="Дом"
                       value={orderData.house}
                       onChange={handleChange}
+                      required
                     />
                     <input
                       className={classNames(s.input, s.input_min)}
@@ -128,6 +140,7 @@ export const Order = () => {
                       placeholder="Квартира"
                       value={orderData.apartment}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </fieldset>
@@ -146,11 +159,15 @@ export const Order = () => {
                     </label>
                   </div>
                   <div className={s.delivery}>
-                    <label htmlFor="delivery">Доставка 01.07</label>
+                    <label htmlFor="delivery">Дата доставки</label>
                     <input
-                      type="hidden"
+                      className={s.input}
+                      type="date"
                       name="deliveryDate"
                       value={orderData.deliveryDate}
+                      onChange={handleChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      required
                     />
                     <div className={s["select-wrapper"]}>
                       <select
@@ -159,6 +176,7 @@ export const Order = () => {
                         id="delivery"
                         value={orderData.deliveryTime}
                         onChange={handleChange}
+                        required
                       >
                         <option value="9-12">с 9:00 до 12:00</option>
                         <option value="12-15">с 12:00 до 15:00</option>
