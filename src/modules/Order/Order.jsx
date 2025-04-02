@@ -188,7 +188,7 @@ export const Order = () => {
                 </fieldset>
               </form>
               <div className={s.footer}>
-                <p className={s.total}>{itemsCart.reduce((acc, item) => acc + item.price * item.quantity, 0)}&nbsp;₽</p>
+                <p className={s.total}>{itemsCart.reduce((acc, item) => acc + item.price * item.quantity, 0)}&nbsp;₸</p>
                 <button
                   className={s.button}
                   type="submit"

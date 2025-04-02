@@ -53,7 +53,7 @@ export const Cart = () => {
 
         <div className="cart__footer">
           <button className="cart__order-btn" onClick={handlerOrderOpen} disabled={!items.length}>Оформить</button>
-          <p className="cart__price cart__price_total">{totalItemsPrice}&nbsp;₽</p>
+          <p className="cart__price cart__price_total">{totalItemsPrice}&nbsp;₸</p>
         </div>
       </div>
     </section>

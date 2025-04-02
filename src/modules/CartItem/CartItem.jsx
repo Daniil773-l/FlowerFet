@@ -48,7 +48,7 @@ export const CartItem = ({id, photoUrl, name, price, quantity}) => {
             onChange={handleInputChange}
             /><button className={s.btn}
             onClick={handleIncrement}>+</button></div>
-        <p className="price">{inputQuantity ? price * inputQuantity : 0}&nbsp;₽</p>
+        <p className="price">{inputQuantity ? price * inputQuantity : 0}&nbsp;₸</p>
         </li>
     </>
   )

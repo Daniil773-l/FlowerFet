@@ -8,9 +8,9 @@ export const Footer = () => {
         alt="Логотип Mirano Flower Boutique" />
   
       <address className="footer__address">
-        <a className="footer__mail"
-          href="mailto:Mirano@gmail.com">Mirano@gmail.com</a>
-  
+        <a className="footer__mail" href="tel:+77074531319">+7 707 453 1319</a>
+
+
         <ul className="footer__social-list">
           <li className="footer__social-item">
             <a className="footer__link" href="#" aria-label="канал в телеграм">
@@ -47,20 +47,9 @@ export const Footer = () => {
         </ul>
       </address>
   
-      <div className="footer__developers">
+
   
-        <ul className="footer__developers-list">
-          <li className="footer__developers-item">
-            Designer: <a className="footer__link" href="Anastasia_Ilina">Anastasia
-              Ilina</a>
-          </li>
-          <li className="footer__developers-item">
-            Developer: <a className="footer__link" href="@Khabibullin_Daniel">Daniel Khabibullin</a>
-          </li>
-        </ul>
-      </div>
-  
-      <p className="footer__copyright">©MIRANO, 2024</p>
+      <p className="footer__copyright">©Loft Flowet, 2025</p>
     </div>
     </footer>
   )

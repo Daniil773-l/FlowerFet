@@ -8,7 +8,7 @@ import {toggleCart} from '../../redux/slices/cartSlice';
 export const Card = ({ className, id, img, title, dateDelivery, price }) => {
   const dispatch = useDispatch();
   const isOpenCart = useSelector(state => state.cart.isOpen);
-  const [buttonText, setIsHovered] = useState(`${price}\u00A0₽`);
+  const [buttonText, setIsHovered] = useState(`${price}\u00A0₸`);
   const hadlerAddToCart = () => {
     dispatch(addItemToCart({productId: id, quantity: 1}));
     if (!isOpenCart) {
@@ -21,7 +21,7 @@ export const Card = ({ className, id, img, title, dateDelivery, price }) => {
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(`${price}\u00A0₽`);
+    setIsHovered(`${price}\u00A0₸`);
   };
   return (
     <article className={classNames(className, "card")}>
